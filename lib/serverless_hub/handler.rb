@@ -1,4 +1,18 @@
-ActiveSupport::Dependencies.autoload_paths += Dir[ "#{ENV["LAMBDA_TASK_ROOT"]}/app/**" ]
+if ENV["LAMBDA_TASK_ROOT"].present?
+  ENV["RAILS_ENV"] ||= "production"
+
+  require "bundler"
+  Bundler.setup(:default, ENV["RAILS_ENV"])
+
+  require "active_record"
+
+  Bundler.require(:default, ENV["RAILS_ENV"])
+
+  ActiveSupport::Dependencies.autoload_paths += Dir[ "#{ENV["LAMBDA_TASK_ROOT"]}/app/**" ]
+
+  ActiveRecord::Base.configurations = {}
+  ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations[ENV["RAILS_ENV"]])
+end
 
 class DefaultApiEntry
   def self.call(env)
