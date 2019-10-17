@@ -1,0 +1,44 @@
+service: hello
+
+custom:
+  settings: ${file(./config/serverless.priv.yml):${self:provider.stage}}
+
+provider:
+  name: aws
+  runtime: ruby2.5
+  region: ap-southeast-2
+  stage: ${opt:stage, 'dev'}
+  environment:
+    RACK_ENV: production
+    RAILS_ENV: production
+    JWKS_URL: ${env:JWKS_URL, self:custom.settings.jwks_url}
+    DATABASE_URL:  ${env:DATABASE_URL, self:custom.settings.database_url}
+
+package:
+  exclude:
+    - layer/**
+    - node_modules/**
+    - "*.yml"
+    - "*.json"
+    - Dockerfile
+    - db/**
+    - Rakefile
+    - bin/**
+    - log/**
+    - public/**
+    - tmp/**
+    - .gitignore
+    - "*.js"
+    - README.md
+    - config/*.yml
+    - vendor/**
+
+functions:
+  helloWorld:
+    handler: serverless_hub.ServerlessHub::Handler.call
+    layers:
+      - ${self:custom.layerArn}
+    events:
+      - http:
+          path: hello
+          method: get

@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require 'serverless_hub'
+require 'rails/generators'
+
+class SLSGenerator < Rails::Generators::Base
+  source_root File.expand_path('../lib/serverless_hub/templates', __dir__)
+
+  def copy
+    directory "./", "./"
+  end
+end
+
+
+generator = SLSGenerator.new
+
+generator.copy
