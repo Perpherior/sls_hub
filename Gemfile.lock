@@ -89,7 +89,7 @@ GEM
     lamby (1.0.1)
       rack
       rails
-    loofah (2.3.0)
+    loofah (2.3.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -106,7 +106,7 @@ GEM
     minitest (5.12.2)
     netrc (0.11.0)
     nio4r (2.5.2)
-    nokogiri (1.10.4)
+    nokogiri (1.10.5)
       mini_portile2 (~> 2.4.0)
     rack (2.0.7)
     rack-test (1.1.0)
