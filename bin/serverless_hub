@@ -4,10 +4,11 @@ require 'serverless_hub'
 require 'rails/generators'
 
 class SLSGenerator < Rails::Generators::Base
-  source_root File.expand_path('../lib/serverless_hub/templates', __dir__)
+  source_root File.expand_path('../lib/serverless_hub/templates/serverless', __dir__)
 
   def copy
     directory "./", "./"
+    copy_file "../gitignore", "./.gitignore"
   end
 end
 

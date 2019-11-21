@@ -1,14 +1,18 @@
 if ENV["LAMBDA_TASK_ROOT"].present?
+
+  ENV['BUNDLE_GEMFILE'] ||= File.expand_path("#{ENV["LAMBDA_TASK_ROOT"]}/Gemfile.serverless", __dir__) rescue nil
+  
   ENV["RAILS_ENV"] ||= "production"
 
   require "bundler"
+
   Bundler.setup(:default, ENV["RAILS_ENV"])
 
   require "active_record"
 
   Bundler.require(:default, ENV["RAILS_ENV"])
 
-  ActiveSupport::Dependencies.autoload_paths += Dir[ "#{ENV["LAMBDA_TASK_ROOT"]}/app/**" ]
+  ActiveSupport::Dependencies.autoload_paths += Dir[ "#{ENV["LAMBDA_TASK_ROOT"]}/app/**/" ]
 
   ActiveRecord::Base.configurations = {}
   ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations[ENV["RAILS_ENV"]])
@@ -38,10 +42,10 @@ module ServerlessHub
       run app
     end.to_app
     
-    def self.call(event:, context:)
+    def self.call(event: {}, context: {})
       return "Warm Up" if event["source"] == "serverless-plugin-warmup"
       
-        Lamby.handler $app, event, context, rack: :api
+      Lamby.handler $app, event, context, rack: :api
     rescue Exception => msg
       p "errors: #{msg}"
       response = {

@@ -1,0 +1,3 @@
+dev:
+  database_url: postgres://devhub_dev:vtjzeQuxTcss7Am@devhub-dev-database.cmnen8jcnijs.ap-southeast-2.rds.amazonaws.com:5432/pw_reality_dev
+  jwks_url: https://cognito-idp.ap-southeast-2.amazonaws.com/ap-southeast-2_CxnrO6P4o/.well-known/jwks.json

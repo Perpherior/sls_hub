@@ -45,7 +45,6 @@ config.priv.yml
 node_modules
 layer
 node_modules
-serverless.priv.yml
 .serverless
 .byebug_history
 tmp
