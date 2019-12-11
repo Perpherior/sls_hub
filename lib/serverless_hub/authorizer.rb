@@ -1,5 +1,5 @@
-require 'jwt'
-require 'json/jwt'
+require "jwt"
+require "json/jwt"
 require "rest-client"
 
 module ServerlessHub
@@ -17,7 +17,7 @@ module ServerlessHub
 
           env["lambda.event"]["requestContext"]["authorizer"] = {
             "principalId" => claims["sub"],
-            "claims" => claims
+            "claims" => claims,
           }
         end
       end
@@ -26,16 +26,14 @@ module ServerlessHub
     end
 
     def self.jwks
-      RestClient.get(ENV["JWKS_URL"] || '')
+      RestClient.get(ENV["JWKS_URL"] || "")
     end
 
     private
-    def decoded_token(token)
-      if token.present? && token.starts_with?("Bearer ")
-        token = token[7, token.length]
-      end
 
-      JWT.decode token, jwk_set.first.to_key, true, { algorithm: 'RS256' } rescue ""
+    def decoded_token(token)
+      token = token.split(" ").last
+      JWT.decode token, jwk_set.first.to_key, true, { algorithm: "RS256" } rescue ""
     end
 
     def jwk_set
@@ -46,17 +44,17 @@ module ServerlessHub
       )
     end
   end
-  
+
   class Authorizer
     def initialize(app)
       @app = app
     end
-  
+
     def call(env)
       if env["lambda.event"] && env["lambda.event"]["requestContext"]
         env["authorizer"] = env["lambda.event"]["requestContext"]["authorizer"]
       end
-  
+
       return @app.call(env)
     end
   end
