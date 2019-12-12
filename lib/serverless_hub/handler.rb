@@ -14,6 +14,9 @@ if ENV["LAMBDA_TASK_ROOT"].present?
 
   ActiveSupport::Dependencies.autoload_paths += Dir[ "#{ENV["LAMBDA_TASK_ROOT"]}/app/**/" ]
 
+  Dir["#{ENV["LAMBDA_TASK_ROOT"]}/config/serverless_initializers/*.rb"].each { |file| require file }
+  I18n.load_path << Dir["#{ENV["LAMBDA_TASK_ROOT"]}/config/locales/*.yml"]
+
   ActiveRecord::Base.configurations = {}
   ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations[ENV["RAILS_ENV"]])
 end
