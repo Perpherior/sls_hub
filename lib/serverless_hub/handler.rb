@@ -1,10 +1,14 @@
 if ENV["LAMBDA_TASK_ROOT"].present?
 
   ENV['BUNDLE_GEMFILE'] ||= "#{ENV["LAMBDA_TASK_ROOT"]}/Gemfile.serverless"
+  ENV['BUNDLE_WITHOUT'] ||= "development:test"
   
   ENV["RAILS_ENV"] ||= "production"
 
-  require "bundler/setup"
+  require "bundler"
+
+  Bundler.setup(:default, ENV["RAILS_ENV"])
+
   require "active_record"
 
   Bundler.require(:default, ENV["RAILS_ENV"])

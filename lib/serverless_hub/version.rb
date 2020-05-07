@@ -1,3 +1,3 @@
 module ServerlessHub
-  VERSION = "1.0.7"
+  VERSION = "1.0.10"
 end
