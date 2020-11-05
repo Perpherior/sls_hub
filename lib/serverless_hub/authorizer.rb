@@ -32,8 +32,17 @@ module ServerlessHub
     private
 
     def decoded_token(token)
-      token = token.split(" ").last
-      JWT.decode token, jwk_set.first.to_key, true, { algorithm: "RS256" } rescue ""
+      token = token.strip
+      if token.include? ' '
+        token = token.split(" ").last
+      end
+      decoded = JWT.decode token, jwk_set.first.to_key, false, { algorithm: "RS256" }
+      key_id = decoded[1]['kid']
+      key = jwk_set.find { |key_obj| key_obj['kid'] == key_id }
+      if key == nil
+        return ""
+      end
+      JWT.decode token, key.to_key, true, { algorithm: "RS256" } rescue ""
     end
 
     def jwk_set
